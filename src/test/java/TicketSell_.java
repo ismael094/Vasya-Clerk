@@ -21,7 +21,8 @@ public class TicketSell_ {
         return new Object[][] {
                 {"NO", new int[]{}},
                 {"YES", new int[]{25}},
-                {"NO", new int[]{50}}
+                {"NO", new int[]{50}},
+                {"YES", new int[]{25,25}}
         };
     }
 
@@ -32,7 +33,9 @@ public class TicketSell_ {
 
     private String sellTicketFor(int[] number) {
         if (number.length == 0) return "NO";
-        return number[0] == 25 ? "YES" : "NO";
+        for (int dollars : number)
+            if (number[0] != 25) return "NO";
+        return "YES";
     }
 
 }
