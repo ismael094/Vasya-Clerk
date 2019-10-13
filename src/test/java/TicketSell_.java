@@ -12,6 +12,7 @@ public class TicketSell_ {
     public static final String YES = "YES";
     public static final int DOLLARS_25 = 0;
     public static final int DOLLARS_50 = 1;
+    public static final int DOLLARS_100 = 2;
     private final String value;
     private final int[] number;
     private int[] billets = new int[3];
@@ -27,8 +28,11 @@ public class TicketSell_ {
                 {NO, new int[]{}},
                 {YES, new int[]{25}},
                 {NO, new int[]{50}},
+                {NO, new int[]{100}},
                 {YES, new int[]{25,25}},
-                {YES, new int[]{25,50}}
+                {YES, new int[]{25,50}},
+                {YES, new int[]{25,25,50,100}},
+                {NO, new int[]{25, 25, 50, 50, 100}}
         };
     }
 
@@ -37,29 +41,66 @@ public class TicketSell_ {
         assertThat(sellTicketFor(number)).isEqualTo(value);
     }
 
-    private String sellTicketFor(int[] number) {
-        if (number.length == DOLLARS_25) return NO;
+    private String sellTicketFor(int[] clientsQueue) {
+        if (clientsQueue.length == 0) return NO;
 
-        for (int dollars : number)
-            if (dollars == 25)
-                sum25Dollars();
-            else if (dollars == 50 && num25Dollars()> DOLLARS_25)
-                sum50Dollars();
+        for (int bill : clientsQueue)
+            if (bill == 25)
+                add25Dollars();
+            else if (bill == 50 && isChangeFor50Dollar()){
+                sellTicketWith50Dollar();
+            } else if (bill == 100 && isChangeFor100Dollar()) {
+                sellTicketWith100Dollar();
+            }
             else
                 return NO;
         return YES;
     }
 
-    private void sum50Dollars() {
+    private boolean isChangeFor50Dollar() {
+        return get25Dollars()> 0;
+    }
+
+    private boolean isChangeFor100Dollar() {
+        return get50Dollars() > 0 && get25Dollars()>0;
+    }
+
+    private void sellTicketWith100Dollar() {
+        add100Dollars();
+        rest50Dollars();
+    }
+
+    private void sellTicketWith50Dollar() {
+        add50Dollars();
+        rest25Dollars();
+    }
+
+    private void add100Dollars() {
+        billets[DOLLARS_100]++;
+    }
+
+    private int get50Dollars() {
+        return billets[DOLLARS_50];
+    }
+
+    private void add50Dollars() {
         billets[DOLLARS_50]++;
     }
 
-    private int num25Dollars() {
+    private void rest50Dollars() {
+        billets[DOLLARS_50]--;
+    }
+
+    private int get25Dollars() {
         return billets[DOLLARS_25];
     }
 
-    private void sum25Dollars() {
+    private void add25Dollars() {
         billets[DOLLARS_25]++;
+    }
+
+    private void rest25Dollars() {
+        billets[DOLLARS_25]--;
     }
 
 
