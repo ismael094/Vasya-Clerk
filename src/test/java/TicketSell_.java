@@ -19,8 +19,8 @@ public class TicketSell_ {
     @Parameterized.Parameters
     public static Object[][] cases() {
         return new Object[][] {
-                {"YES", new int[]{25}}
-
+                {"YES", new int[]{25}},
+                {"NO", new int[]{}}
         };
     }
 
@@ -30,7 +30,7 @@ public class TicketSell_ {
     }
 
     private String sellTicketFor(int[] number) {
-        return null;
+        return number.length == 0 ? "NO" : "YES";
     }
 
 }
